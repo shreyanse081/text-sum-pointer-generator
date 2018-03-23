@@ -54,13 +54,16 @@ class Vocab(object):
       self._count += 1
 
     # Read the vocab file and add words up to max_size
-    with open(vocab_file, 'r') as vocab_f:
+    with open(vocab_file, 'r', encoding='utf8') as vocab_f: #New : add the utf8 encoding to prevent error
       for line in vocab_f:
         pieces = line.split()
-        if len(pieces) != 2:
+        if len(pieces) != 1: #New : before it was 2, don't know why
+
           print('Warning: incorrectly formatted line in vocabulary file: %s\n' % line)
-          continue
-        w = pieces[0]
+          w = ' '.join(pieces) #New // bad formated words are numbers that were taken as list when splitted
+          #continue New // I wan to add this word to the vocab too
+        else: #New
+          w = pieces[0]
         if w in [SENTENCE_START, SENTENCE_END, UNKNOWN_TOKEN, PAD_TOKEN, START_DECODING, STOP_DECODING]:
           raise Exception('<s>, </s>, [UNK], [PAD], [START] and [STOP] shouldn\'t be in the vocab file, but %s is' % w)
         if w in self._word_to_id:
@@ -71,7 +74,6 @@ class Vocab(object):
         if max_size != 0 and self._count >= max_size:
           print("max_size of vocab was specified as %i; we now have %i words. Stopping reading." % (max_size, self._count))
           break
-
     print("Finished constructing vocabulary of %i total words. Last word added: %s" % (self._count, self._id_to_word[self._count-1]))
 
   def word2id(self, word):

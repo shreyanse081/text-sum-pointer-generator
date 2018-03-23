@@ -274,11 +274,11 @@ def main(unused_argv):
   # Change log_root to FLAGS.log_root/FLAGS.exp_name and create the dir if necessary
   FLAGS.log_root = os.path.join(FLAGS.log_root, FLAGS.exp_name)
   if not os.path.exists(FLAGS.log_root):
-    if FLAGS.mode=="train":
+    if FLAGS.mode =="train":
       os.makedirs(FLAGS.log_root)
     else:
       raise Exception("Logdir %s doesn't exist. Run in train mode to create it." % (FLAGS.log_root))
-
+  print("vocab path is ",FLAGS.vocab_path)
   vocab = Vocab(FLAGS.vocab_path, FLAGS.vocab_size) # create a vocabulary
 
   # If in decode mode, set batch_size = beam_size
@@ -294,11 +294,11 @@ def main(unused_argv):
   # Make a namedtuple hps, containing the values of the hyperparameters that the model needs
   hparam_list = ['mode', 'lr', 'adagrad_init_acc', 'rand_unif_init_mag', 'trunc_norm_init_std', 'max_grad_norm', 'hidden_dim', 'emb_dim', 'batch_size', 'max_dec_steps', 'max_enc_steps', 'coverage', 'cov_loss_wt', 'pointer_gen']
   hps_dict = {}
-  for key,val in FLAGS.__flags.items(): # for each flag
-    if key in hparam_list: # if it's in the list
-      hps_dict[key] = val # add it to the dict
+  #print("This is FLAGS -->",FLAGS)
+  for val in FLAGS: # for each flag // New modification for TF 1.5
+    if val in hparam_list: # if it's in the list
+      hps_dict[val] = FLAGS[val].value # add it to the dict // New modification for TF 1.5
   hps = namedtuple("HParams", hps_dict.keys())(**hps_dict)
-
   # Create a batcher object that will create minibatches of data
   batcher = Batcher(FLAGS.data_path, vocab, hps, single_pass=FLAGS.single_pass)
 

@@ -57,6 +57,7 @@ class BeamSearchDecoder(object):
       # Make a descriptive decode directory name
       ckpt_name = "ckpt-" + ckpt_path.split('-')[-1] # this is something of the form "ckpt-123456"
       self._decode_dir = os.path.join(FLAGS.log_root, get_decode_dir_name(ckpt_name))
+      print("Le decode dire est -->",self._decode_dir)
       if os.path.exists(self._decode_dir):
         raise Exception("single_pass decode directory %s should not already exist" % self._decode_dir)
 
@@ -152,10 +153,10 @@ class BeamSearchDecoder(object):
     ref_file = os.path.join(self._rouge_ref_dir, "%06d_reference.txt" % ex_index)
     decoded_file = os.path.join(self._rouge_dec_dir, "%06d_decoded.txt" % ex_index)
 
-    with open(ref_file, "w") as f:
+    with open(ref_file, "w", encoding="utf8") as f:
       for idx,sent in enumerate(reference_sents):
         f.write(sent) if idx==len(reference_sents)-1 else f.write(sent+"\n")
-    with open(decoded_file, "w") as f:
+    with open(decoded_file, "w", encoding="utf8") as f:
       for idx,sent in enumerate(decoded_sents):
         f.write(sent) if idx==len(decoded_sents)-1 else f.write(sent+"\n")
 

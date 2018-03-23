@@ -37,6 +37,8 @@ def load_ckpt(saver, sess, ckpt_dir="train"):
       tf.logging.info('Loading checkpoint %s', ckpt_state.model_checkpoint_path)
       saver.restore(sess, ckpt_state.model_checkpoint_path)
       return ckpt_state.model_checkpoint_path
-    except:
+    except Exception as e:
+      print('The error is -->',e)
       tf.logging.info("Failed to load checkpoint from %s. Sleeping for %i secs...", ckpt_dir, 10)
       time.sleep(10)
+      break
