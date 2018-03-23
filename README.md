@@ -1,10 +1,26 @@
 This repository contains code for the ACL 2017 paper *[Get To The Point: Summarization with Pointer-Generator Networks](https://arxiv.org/abs/1704.04368)*. 
 
+It is a version upgraded to run on TF 1.5 and to correct some bug when testing with new dataset. TF1.5' support on tf.tags has changed between TF1.2 and 1.5 so I changed the
+code a bit to match new requirements
+
+Bugs on new data: 
+I worked on a new dataset and had some issues with encoding so I forced utf8 encoding in this version, feel free to correct it if you don't need it
+
+Bug on vocab_meta.tsv: 
+I had trouble when loading the pre trained model, it appears that the vocab files had 4 words that didn't pass the tes when processing in the data.py,
+I changed a bit the code to format thoses words (it was numbers that were considered as lists because they were a space in their writting, ex: 180 500, 
+so I just concatenate them before processing to keep thoses words and deal with the shape problem.
+
+
+
+
 ## Looking for test set output?
 The test set output of the models described in the paper can be found [here](https://drive.google.com/file/d/0B7pQmm-OfDv7MEtMVU5sOHc5LTg/view?usp=sharing).
 
 ## Looking for pretrained model?
 A pretrained model is available here:
+
+\\ Look at the initial repo to use the TF 1.0 version, as this fork aims to upgrade the code to run on TF 1.5  and Python 3 //
 * [Version for Tensorflow 1.0](https://drive.google.com/file/d/0B7pQmm-OfDv7SHFadHR4RllfR1E/view?usp=sharing)
 * [Version for Tensorflow 1.2.1](https://drive.google.com/file/d/0B7pQmm-OfDv7ZUhHZm9ZWEZidDg/view?usp=sharing)
 
